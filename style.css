@@ -111,21 +111,21 @@ button:hover {
   padding: 10px 12px;
   border-radius: 999px;
 
-  /* DARK NEON BASE */
-  background: radial-gradient(circle at top, rgba(0, 255, 255, 0.25), rgba(120, 0, 255, 0.20));
-  color: #cfd2ff;
+  /* DARK NEON BUT READABLE */
+  background: radial-gradient(circle at top, rgba(0, 255, 255, 0.45), rgba(120, 0, 255, 0.35));
+  color: #e8e8ff; /* readable neon-white */
 
   font-size: 13px;
 
-  /* DIMMED GLOW — not blinding */
-  box-shadow: 0 0 8px currentColor;
-  filter: drop-shadow(0 0 4px currentColor);
-  opacity: 0;
+  /* SOFT GLOW, NOT GHOSTLY, NOT BLINDING */
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.35);
+  filter: drop-shadow(0 0 6px currentColor);
 
+  opacity: 0; /* animation will fade it in */
   transform: translateY(20px) scale(0.9);
   animation: floatIn 0.7s ease-out forwards, drift 18s linear infinite;
 
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(4px); /* keeps it holographic */
 }
 
 .echo-orb::after {
