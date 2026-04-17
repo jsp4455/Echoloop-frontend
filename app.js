@@ -5,14 +5,15 @@ const backend = "https://echoloop-backend.onrender.com";
 const apiBase = backend.replace(/\/$/, "");
 const wsUrl = apiBase.replace(/^http/, "ws");
 
-
 const form = document.getElementById("echo-form");
 const textEl = document.getElementById("echo-text");
 const statusEl = document.getElementById("status");
 const container = document.getElementById("echo-container");
+const presenceEl = document.getElementById("presence");
+const overlay = document.querySelector(".world-overlay");
 
-// mood zones for clustering
-const moodZones = {
+// mood zones / gravity wells
+const clusterCenters = {
   happy: { x: 20, y: 20 },
   sad: { x: 70, y: 70 },
   angry: { x: 70, y: 20 },
@@ -21,30 +22,64 @@ const moodZones = {
 };
 
 function placeOrb(orb, mood) {
-  const zone = moodZones[mood] || moodZones.neutral;
-  const x = zone.x + (Math.random() * 20 - 10);
-  const y = zone.y + (Math.random() * 20 - 10);
+  const zone = clusterCenters[mood] || clusterCenters.neutral;
+  const pullStrength = 0.6;
+  const randX = Math.random() * 40 - 20;
+  const randY = Math.random() * 40 - 20;
+  const x = zone.x + randX * (1 - pullStrength);
+  const y = zone.y + randY * (1 - pullStrength);
   orb.style.left = `${x}%`;
   orb.style.top = `${y}%`;
+}
+
+function worldPulse(color) {
+  if (!overlay) return;
+  overlay.style.background = `radial-gradient(circle at 20% 20%, ${color}, transparent 60%), radial-gradient(circle at 80% 80%, ${color}, transparent 60%)`;
+  overlay.style.opacity = "0.5";
+  setTimeout(() => {
+    overlay.style.opacity = "0.18";
+  }, 400);
 }
 
 function addEchoToWorld(echo, index = 0) {
   const orb = document.createElement("div");
   orb.className = "echo-orb";
-  orb.dataset.mood = echo.mood || "neutral";
+  const mood = echo.mood || "neutral";
+  orb.dataset.mood = mood;
 
   const created = new Date(echo.createdAt);
   const timeStr = created.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  const moodColorMap = {
+    happy: "#00ffcc",
+    sad: "#4466ff",
+    angry: "#ff3366",
+    dreamy: "#ff99ff",
+    neutral: "#8a5bff"
+  };
+
+  orb.style.color = moodColorMap[mood] || moodColorMap.neutral;
 
   orb.innerHTML = `
     <div>${echo.text}</div>
     <span class="echo-time">${timeStr}</span>
   `;
 
-  placeOrb(orb, echo.mood);
+  placeOrb(orb, mood);
   orb.style.animationDelay = `${index * 0.05}s`;
 
   container.appendChild(orb);
+
+  // echo decay
+  setTimeout(() => {
+    orb.style.transition = "opacity 3s ease, transform 3s ease";
+    orb.style.opacity = "0";
+    orb.style.transform += " scale(0.4)";
+    setTimeout(() => orb.remove(), 3000);
+  }, 20000);
+
+  // world pulse
+  worldPulse(moodColorMap[mood] + "55");
 }
 
 function renderEchoes(echoes) {
@@ -102,6 +137,19 @@ function connectWS() {
       if (data.type === "world_reset") {
         container.innerHTML = "";
       }
+
+      if (data.type === "presence" && typeof data.online === "number") {
+        if (presenceEl) {
+          presenceEl.textContent = `${data.online} explorers online`;
+        }
+      }
+
+      if (data.type === "mood_storm" && data.mood) {
+        document.body.classList.add(`storm-${data.mood}`);
+        setTimeout(() => {
+          document.body.classList.remove(`storm-${data.mood}`);
+        }, 3000);
+      }
     };
 
     ws.onclose = () => {
@@ -140,7 +188,6 @@ if (form) {
 
       textEl.value = "";
       statusEl.textContent = "Echo sent.";
-      // WebSocket will push it; loadEchoes is fallback
     } catch (err) {
       console.error(err);
       statusEl.textContent = "Error sending echo.";
