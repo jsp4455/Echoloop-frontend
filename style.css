@@ -111,22 +111,27 @@ button:hover {
   padding: 10px 12px;
   border-radius: 999px;
 
-  /* DARK NEON BUT READABLE */
-  background: radial-gradient(circle at top, rgba(0, 255, 255, 0.45), rgba(120, 0, 255, 0.35));
-  color: #e8e8ff; /* readable neon-white */
+  /* SOLID, READABLE NEON GRADIENT (NO HOLOGRAM) */
+  background: radial-gradient(circle at top,
+    rgba(0, 255, 255, 0.85),
+    rgba(120, 0, 255, 0.75)
+  );
 
+  /* TEXT ALWAYS READABLE */
+  color: #ffffff;
   font-size: 13px;
+  font-weight: 500;
 
-  /* SOFT GLOW, NOT GHOSTLY, NOT BLINDING */
+  /* CLEAN NEON GLOW (NOT BLURRY) */
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.35);
-  filter: drop-shadow(0 0 6px currentColor);
 
-  opacity: 0; /* animation will fade it in */
+  /* REMOVE HOLOGRAM EFFECTS */
+  filter: none;
+  backdrop-filter: none;
+
+  opacity: 0;
   transform: translateY(20px) scale(0.9);
   animation: floatIn 0.7s ease-out forwards, drift 18s linear infinite;
-
-  backdrop-filter: blur(4px); /* keeps it holographic */
-}
 
 .echo-orb::after {
   content: "";
