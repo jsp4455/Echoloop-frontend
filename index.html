@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Echoloop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="world-overlay"></div>
+
+  <div class="ui">
+    <h1>Echoloop</h1>
+    <p>Drop an echo. Watch the world react in real time.</p>
+
+    <form id="echo-form">
+      <textarea id="echo-text" placeholder="Type a thought, memory, or feeling..." required></textarea>
+      <button type="submit">Send Echo</button>
+      <div id="status"></div>
+    </form>
+
+    <div id="echo-container"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

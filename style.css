@@ -1,0 +1,147 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  background: radial-gradient(circle at top, #4b00ff, #050014 60%, #000000);
+  color: #f5f5ff;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.world-overlay {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.15), transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(255, 0, 200, 0.18), transparent 60%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  filter: blur(4px);
+}
+
+.ui {
+  position: relative;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px 24px;
+  background: rgba(5, 0, 30, 0.8);
+  border-radius: 16px;
+  border: 1px solid rgba(120, 80, 255, 0.7);
+  box-shadow: 0 0 30px rgba(120, 80, 255, 0.5);
+}
+
+h1 {
+  font-size: 32px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e0d4ff;
+  text-shadow: 0 0 10px #8a5bff;
+}
+
+p {
+  margin-top: 6px;
+  color: #b9b3ff;
+}
+
+#echo-form {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#echo-text {
+  width: 100%;
+  min-height: 80px;
+  background: rgba(10, 0, 40, 0.9);
+  border: 1px solid rgba(150, 120, 255, 0.7);
+  border-radius: 10px;
+  padding: 10px;
+  color: #f5f5ff;
+  resize: vertical;
+}
+
+button {
+  align-self: flex-end;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid #ff4be6;
+  background: radial-gradient(circle at top, #ff4be6, #7b1fff);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 12px rgba(255, 75, 230, 0.7);
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+#status {
+  min-height: 18px;
+  font-size: 12px;
+  color: #9fe0ff;
+}
+
+#echo-container {
+  margin-top: 20px;
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+}
+
+/* Echo orbs */
+.echo-orb {
+  position: absolute;
+  max-width: 220px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: radial-gradient(circle at top, rgba(0, 255, 255, 0.9), rgba(120, 0, 255, 0.9));
+  color: #050014;
+  font-size: 13px;
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.8);
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+  animation: floatIn 0.7s ease-out forwards, drift 18s linear infinite;
+}
+
+.echo-orb[data-mood="happy"] {
+  background: radial-gradient(circle at top, #00ffcc, #00a3ff);
+}
+
+.echo-orb[data-mood="sad"] {
+  background: radial-gradient(circle at top, #4466ff, #220066);
+}
+
+.echo-orb[data-mood="angry"] {
+  background: radial-gradient(circle at top, #ff3366, #990000);
+}
+
+.echo-orb[data-mood="dreamy"] {
+  background: radial-gradient(circle at top, #ff99ff, #6633ff);
+}
+
+.echo-time {
+  display: block;
+  font-size: 10px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+@keyframes floatIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes drift {
+  0% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-20px) translateX(10px); }
+  100% { transform: translateY(0) translateX(0); }
+}
