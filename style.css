@@ -110,14 +110,22 @@ button:hover {
   max-width: 220px;
   padding: 10px 12px;
   border-radius: 999px;
-  background: radial-gradient(circle at top, rgba(0, 255, 255, 0.9), rgba(120, 0, 255, 0.9));
-  color: #050014;
+
+  /* DARK NEON BASE */
+  background: radial-gradient(circle at top, rgba(0, 255, 255, 0.25), rgba(120, 0, 255, 0.20));
+  color: #cfd2ff;
+
   font-size: 13px;
-  box-shadow: 0 0 18px rgba(0, 255, 255, 0.8);
+
+  /* DIMMED GLOW — not blinding */
+  box-shadow: 0 0 8px currentColor;
+  filter: drop-shadow(0 0 4px currentColor);
   opacity: 0;
+
   transform: translateY(20px) scale(0.9);
   animation: floatIn 0.7s ease-out forwards, drift 18s linear infinite;
-  filter: drop-shadow(0 0 12px currentColor);
+
+  backdrop-filter: blur(6px);
 }
 
 .echo-orb::after {
