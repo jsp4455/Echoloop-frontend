@@ -12,6 +12,36 @@ const container = document.getElementById("echo-container");
 const presenceEl = document.getElementById("presence");
 const overlay = document.querySelector(".world-overlay");
 
+// --------------------------------------------------
+// CLEAR ECHOES (ADMIN NUKE)
+// --------------------------------------------------
+async function clearEchoes() {
+  try {
+    const res = await fetch(`${apiBase}/admin/clear`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-key": "YOUR_ADMIN_KEY"
+      }
+    });
+
+    const data = await res.json();
+    console.log("Echoes cleared:", data);
+
+    // Clear the world visually
+    container.innerHTML = "";
+  } catch (err) {
+    console.error("Failed to clear echoes:", err);
+  }
+}
+
+// Keyboard shortcut: SHIFT + DELETE
+document.addEventListener("keydown", (e) => {
+  if (e.shiftKey && e.key === "Delete") {
+    clearEchoes();
+  }
+});
+
 // mood zones / gravity wells
 const clusterCenters = {
   happy: { x: 20, y: 20 },
