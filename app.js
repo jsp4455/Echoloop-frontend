@@ -102,11 +102,11 @@ function addEchoToWorld(echo, index = 0) {
 
   // echo decay
   setTimeout(() => {
-    orb.style.transition = "opacity 3s ease, transform 3s ease";
+    orb.style.transition = "opacity 30s ease, transform 30s ease";
     orb.style.opacity = "0";
     orb.style.transform += " scale(0.4)";
     setTimeout(() => orb.remove(), 3000);
-  }, 20000);
+  }, 60000);
 
   // world pulse
   worldPulse(moodColorMap[mood] + "55");
