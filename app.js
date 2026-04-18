@@ -21,7 +21,7 @@ async function clearEchoes() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-admin-key": "YOUR_ADMIN_KEY"
+        "x-admin-key": "changeme"
       }
     });
 
