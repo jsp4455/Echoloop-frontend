@@ -101,12 +101,30 @@ function addEchoToWorld(echo, index = 0) {
   container.appendChild(orb);
 
   // echo decay
-  setTimeout(() => {
-    orb.style.transition = "opacity 30s ease, transform 30s ease";
-    orb.style.opacity = "0";
-    orb.style.transform += " scale(0.4)";
-    setTimeout(() => orb.remove(), 3000);
-  }, 60000);
+setTimeout(() => {
+  const particleCount = 26;
+
+  for (let i = 0; i < particleCount; i++) {
+    const p = document.createElement("div");
+    p.className = "echo-particle";
+    p.style.background = orb.style.color;
+
+    // random burst direction
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 40 + Math.random() * 40;
+
+    p.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+    p.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+
+    p.style.left = orb.style.left;
+    p.style.top = orb.style.top;
+
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 1200);
+  }
+
+  orb.remove();
+}, 60000);
 
   // world pulse
   worldPulse(moodColorMap[mood] + "55");
