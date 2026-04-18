@@ -53,11 +53,14 @@ const clusterCenters = {
 
 function placeOrb(orb, mood) {
   const zone = clusterCenters[mood] || clusterCenters.neutral;
-  const pullStrength = 0.6;
-  const randX = Math.random() * 40 - 20;
-  const randY = Math.random() * 40 - 20;
+
+  const pullStrength = 0.35; // softer pull
+  const randX = Math.random() * 120 - 60; // much wider scatter
+  const randY = Math.random() * 120 - 60;
+
   const x = zone.x + randX * (1 - pullStrength);
   const y = zone.y + randY * (1 - pullStrength);
+
   orb.style.left = `${x}%`;
   orb.style.top = `${y}%`;
 }
