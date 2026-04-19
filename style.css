@@ -98,9 +98,9 @@ button:hover {
 }
 
 #echo-container {
-  margin-top: 20px;
+  margin-top: 40px;
   position: relative;
-  height: 380px;
+  height: 680px;
   overflow: hidden;
 }
 
