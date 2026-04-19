@@ -136,6 +136,12 @@ button:hover {
   animation: floatIn 0.7s ease-out forwards, drift 18s linear infinite;
 }
 
+.echo-orb:hover {
+  transform: scale(1.15) translateY(-4px);
+  box-shadow: 0 0 20px currentColor;
+  z-index: 999;
+}
+
 /* MANUAL TEXT COLOR OVERRIDE (correct placement) */
 .echo-orb {
   color: #ffffff !important;
