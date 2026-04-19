@@ -250,3 +250,28 @@ body.storm-dreamy {
   filter: blur(2px);
   animation: particleBurst 1.2s ease-out forwards;
 }
+
+.echo-orb {
+  animation:
+    floatIn 0.7s ease-out forwards,
+    drift 18s linear infinite,
+    trailFade 1.8s ease-out infinite;
+}
+
+@keyframes trailFade {
+  0% { filter: drop-shadow(0 0 6px currentColor); }
+  100% { filter: drop-shadow(0 0 0 currentColor); }
+}
+
+.echo-orb {
+  animation:
+    floatIn 0.7s ease-out forwards,
+    drift 18s linear infinite,
+    breathe 6s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
