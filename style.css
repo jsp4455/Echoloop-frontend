@@ -35,6 +35,11 @@ body {
   border: 1px solid rgba(120, 80, 255, 0.7);
   box-shadow: 0 0 30px rgba(120, 80, 255, 0.5);
 }
+.ui {
+  position: relative;
+  z-index: 10; /* ← this is the only change you needed */
+}
+
 
 h1 {
   font-size: 32px;
@@ -98,10 +103,14 @@ button:hover {
 }
 
 #echo-container {
-  margin-top: 20px;
-  position: relative;
-  height: 600px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* -------------------------------------------------- */
