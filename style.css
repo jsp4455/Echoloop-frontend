@@ -269,5 +269,119 @@ body.storm-dreamy {
   100% { filter: drop-shadow(0 0 0 currentColor); }
 }
 
+/* =========================================
+   WORD REACTION ENGINE — VISUALS
+   ========================================= */
+
+/* Sparkles */
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 12px #ffffff;
+  animation: sparkle-pop 1.2s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes sparkle-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* Word portal */
+.word-portal {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #8a5bff;
+  box-shadow: 0 0 18px #8a5bff;
+  animation: portal-spin 3s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes portal-spin {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.6) rotate(360deg);
+    opacity: 0.2;
+  }
+}
+
+/* Storm from words */
+body.storm-word {
+  filter: contrast(1.3) saturate(1.4);
+  animation: storm-word-shake 0.4s linear 4;
+}
+
+@keyframes storm-word-shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(3px, -3px); }
+  50% { transform: translate(-3px, 3px); }
+  75% { transform: translate(3px, 3px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Orb movement keywords */
+.echo-orb.shake {
+  animation: orb-shake 0.4s linear infinite;
+}
+
+@keyframes orb-shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(2px, -2px); }
+  50% { transform: translate(-2px, 2px); }
+  75% { transform: translate(2px, 2px); }
+  100% { transform: translate(0, 0); }
+}
+
+.echo-orb.spin {
+  animation: orb-spin 3s linear infinite;
+}
+
+@keyframes orb-spin {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.echo-orb.float {
+  animation: orb-float 3s ease-in-out infinite;
+}
+
+@keyframes orb-float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+.echo-orb.jump {
+  animation: orb-jump 0.8s ease-out infinite;
+}
+
+@keyframes orb-jump {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(-14px); }
+  100% { transform: translateY(0); }
+}
 
 
