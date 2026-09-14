@@ -252,3 +252,210 @@ if (form) {
 // initial load + realtime
 loadEchoes();
 connectWS();
+
+// ======================================================
+// WORD REACTION ENGINE — ADD-ON MODULE
+// ======================================================
+
+// ----------------------------------------------
+// 1. WORD MEMORY
+// ----------------------------------------------
+const WordMemory = [];
+
+function storeWords(text) {
+  text.split(" ").forEach(w => {
+    const word = w.toLowerCase().trim();
+    if (word.length > 0) WordMemory.push(word);
+  });
+}
+
+// ----------------------------------------------
+// 2. MOOD DETECTION FROM TEXT
+// ----------------------------------------------
+const moodWords = {
+  happy: ["yay", "good", "love", "nice", "fun", "great", "win"],
+  sad: ["sad", "down", "hurt", "cry", "lost"],
+  angry: ["mad", "angry", "hate", "wtf", "rage"],
+  dreamy: ["dream", "float", "soft", "magic", "vibe"]
+};
+
+function detectMoodFromText(text) {
+  const lower = text.toLowerCase();
+  for (const mood in moodWords) {
+    if (moodWords[mood].some(w => lower.includes(w))) {
+      return mood;
+    }
+  }
+  return null;
+}
+
+// ----------------------------------------------
+// 3. WORD-TRIGGERED WORLD EVENTS
+// ----------------------------------------------
+function spawnSparkles() {
+  for (let i = 0; i < 20; i++) {
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.style.left = `${Math.random() * 100}%`;
+    s.style.top = `${Math.random() * 100}%`;
+    container.appendChild(s);
+    setTimeout(() => s.remove(), 1200);
+  }
+}
+
+function spawnPortal() {
+  const p = document.createElement("div");
+  p.className = "word-portal";
+  p.style.left = `${Math.random() * 80 + 10}%`;
+  p.style.top = `${Math.random() * 80 + 10}%`;
+  container.appendChild(p);
+  setTimeout(() => p.remove(), 3000);
+}
+
+function triggerStormEffect() {
+  document.body.classList.add("storm-word");
+  setTimeout(() => document.body.classList.remove("storm-word"), 2000);
+}
+
+const wordTriggers = {
+  "boom": () => triggerStormEffect(),
+  "sparkle": () => spawnSparkles(),
+  "portal": () => spawnPortal(),
+  "storm": () => triggerStormEffect(),
+};
+
+// ----------------------------------------------
+// 4. WORD-BASED PARTICLE COLORS
+// ----------------------------------------------
+function getParticleColor(text) {
+  const t = text.toLowerCase();
+  if (t.includes("fire")) return "#ff3300";
+  if (t.includes("ice")) return "#00ccff";
+  if (t.includes("love")) return "#ff00aa";
+  if (t.includes("gold")) return "#ffcc00";
+  return null;
+}
+
+// ----------------------------------------------
+// 5. WORD-BASED ORB SIZE
+// ----------------------------------------------
+function getOrbScale(text) {
+  if (text.length > 40) return "scale(1.4)";
+  if (text.length < 10) return "scale(0.8)";
+  return "scale(1)";
+}
+
+// ----------------------------------------------
+// 6. WORD-BASED WORLD MOOD
+// ----------------------------------------------
+function detectWorldMood(text) {
+  const t = text.toLowerCase();
+  if (t.includes("angry")) return "angry";
+  if (t.includes("happy")) return "happy";
+  if (t.includes("sad")) return "sad";
+  if (t.includes("dream")) return "dreamy";
+  return null;
+}
+
+// ----------------------------------------------
+// 7. WORD-BASED ORB MOVEMENT
+// ----------------------------------------------
+function applyMovementKeywords(orb, text) {
+  const t = text.toLowerCase();
+  if (t.includes("shake")) orb.classList.add("shake");
+  if (t.includes("spin")) orb.classList.add("spin");
+  if (t.includes("float")) orb.classList.add("float");
+  if (t.includes("jump")) orb.classList.add("jump");
+}
+
+// ======================================================
+// OVERRIDE addEchoToWorld WITHOUT BREAKING ORIGINAL
+// ======================================================
+const originalAddEchoToWorld = addEchoToWorld;
+
+addEchoToWorld = function(echo, index = 0) {
+  // run original behavior
+  originalAddEchoToWorld(echo, index);
+
+  // get the orb we just created
+  const orb = container.lastElementChild;
+  if (!orb) return;
+
+  const text = echo.text || "";
+
+  // store words
+  storeWords(text);
+
+  // mood detection
+  const detectedMood = detectMoodFromText(text);
+  if (detectedMood) {
+    orb.dataset.mood = detectedMood;
+    orb.style.color = {
+      happy: "#00ffcc",
+      sad: "#4466ff",
+      angry: "#ff3366",
+      dreamy: "#ff99ff",
+      neutral: "#8a5bff"
+    }[detectedMood];
+  }
+
+  // world mood
+  const wm = detectWorldMood(text);
+  if (wm) updateWorldBackground(wm);
+
+  // orb size
+  orb.style.transform = getOrbScale(text);
+
+  // movement keywords
+  applyMovementKeywords(orb, text);
+
+  // word-triggered events
+  Object.keys(wordTriggers).forEach(word => {
+    if (text.toLowerCase().includes(word)) {
+      wordTriggers[word]();
+    }
+  });
+
+  // particle color override
+  const specialColor = getParticleColor(text);
+  if (specialColor) {
+    orb.dataset.specialParticleColor = specialColor;
+  }
+};
+
+// ======================================================
+// PATCH PARTICLE BURST TO USE SPECIAL COLORS
+// ======================================================
+const oldSetTimeout = window.setTimeout;
+window.setTimeout = function(fn, delay) {
+  // intercept only the particle burst timeout
+  if (fn.toString().includes("echo-particle")) {
+    return oldSetTimeout(() => {
+      const orb = container.lastElementChild;
+      const special = orb?.dataset?.specialParticleColor;
+
+      const particleCount = 26;
+      for (let i = 0; i < particleCount; i++) {
+        const p = document.createElement("div");
+        p.className = "echo-particle";
+        p.style.background = special || orb.style.color;
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 40 + Math.random() * 40;
+
+        p.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+        p.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+
+        p.style.left = orb.style.left;
+        p.style.top = orb.style.top;
+
+        container.appendChild(p);
+        setTimeout(() => p.remove(), 1200);
+      }
+
+      orb.remove();
+    }, delay);
+  }
+
+  return oldSetTimeout(fn, delay);
+};
